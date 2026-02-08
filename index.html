@@ -17,20 +17,58 @@
             overflow-x: hidden;
         }
 
+        /* Base slide styling - images are 4269x2400 (16:9 aspect ratio) */
         .slide {
             width: 100vw;
             height: 100vh;
-            object-fit: cover;
             display: block;
+            object-fit: contain; /* Default to contain to prevent trimming */
+            object-position: center;
+            background: #000000;
         }
 
+        /* Landscape devices (wider than 16:9) - use cover to fill screen */
+        @media (min-aspect-ratio: 16/9) {
+            .slide {
+                object-fit: cover;
+            }
+        }
+
+        /* Portrait and narrow devices - make height match actual image */
+        @media (max-aspect-ratio: 16/9) {
+            .slide {
+                height: calc(100vw * 9 / 16); /* Height matches 16:9 aspect ratio */
+                object-fit: cover; /* Fill the calculated area */
+                object-position: center;
+            }
+        }
+
+        /* Video slide responsive styling */
         .video-slide {
             width: 100vw;
             height: 100vh;
-            object-fit: cover;
+            object-fit: contain; /* Default to contain */
             display: block;
+            background: #000000;
         }
 
+        /* Landscape devices (wider than 16:9) - use cover */
+        @media (min-aspect-ratio: 16/9) {
+            .video-slide {
+                object-fit: cover;
+            }
+        }
+
+        /* Portrait and narrow devices - make height match actual video */
+        @media (max-aspect-ratio: 16/9) {
+            .video-slide {
+                height: calc(100vw * 9 / 16); /* Height matches 16:9 aspect ratio */
+                object-fit: cover; /* Fill the calculated area */
+                object-position: center;
+            }
+        }
+
+        /* YouTube slide container */
         .youtube-slide {
             width: 100vw;
             height: 100vh;
@@ -47,6 +85,7 @@
             border: none;
         }
 
+        /* Link slide with responsive clickable areas */
         .link-slide {
             width: 100vw;
             height: 100vh;
@@ -57,8 +96,9 @@
         .link-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
+            background: #000000;
         }
 
         .clickable-area {
@@ -71,8 +111,6 @@
             opacity: 0.8;
         }
 
-        /* Adjust these positions based on where your icons are located */
-        /* You'll need to customize these values */
         .link1 {
             top: 50%;
             left: 30%;
@@ -89,80 +127,205 @@
             transform: translate(-50%, -50%);
         }
 
-        /* Container to hold both the background image and the video */
+        /* Overlay container for Slide 7 with responsive YouTube embed */
         .overlay-container {
             position: relative;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
+            background: #000000;
         }
 
-        /* Force the image to stay in the background */
+        /* Portrait - make container match image height */
+        @media (max-aspect-ratio: 16/9) {
+            .overlay-container {
+                height: calc(100vw * 9 / 16);
+            }
+        }
+
         .overlay-container .slide {
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
-            /* Lower layer */
+            object-fit: contain;
+        }
+
+        /* Portrait - fill the calculated container */
+        @media (max-aspect-ratio: 16/9) {
+            .overlay-container .slide {
+                object-fit: cover;
+            }
+        }
+
+        /* Adjust background image for wider screens */
+        @media (min-aspect-ratio: 16/9) {
+            .overlay-container .slide {
+                object-fit: cover;
+            }
         }
 
         .overlay-container .youtube-slide {
             position: absolute;
-            /* Increase 'top' to move the video lower (e.g., 60% instead of 50%) */
             top: 60%;
             left: 50%;
             transform: translate(-50%, -50%);
-
-            /* Decrease height so it doesn't hit the bottom of the screen */
             width: 70%;
             height: 60%;
-
             z-index: 2;
             background: transparent;
         }
 
-        /* Container for Slide 8 */
+        /* Responsive adjustments for YouTube overlay */
+        @media (max-width: 1024px) {
+            .overlay-container .youtube-slide {
+                width: 80%;
+                height: 50%;
+                top: 55%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .overlay-container .youtube-slide {
+                width: 90%;
+                height: 40%;
+                top: 50%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .overlay-container .youtube-slide {
+                width: 95%;
+                height: 35%;
+                top: 50%;
+            }
+        }
+
+        /* Video overlay wrapper for Slide 8 */
         .video-overlay-wrapper {
             position: relative;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-        }
-
-        /* Container to position the icons 20% from the bottom */
-        .icon-container {
-            position: absolute;
-            /* This forces the container to stay between Top 75% and Bottom 15% */
-            top: 75%;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-
             display: flex;
             align-items: center;
-            /* Centers icons vertically within that 10% space */
+            justify-content: center;
+        }
+
+        /* Portrait - make container match video height */
+        @media (max-aspect-ratio: 16/9) {
+            .video-overlay-wrapper {
+                height: calc(100vw * 9 / 16);
+                align-items: stretch;
+            }
+        }
+
+        .video-overlay-wrapper .video-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Icon container positioned relative to video content area */
+        .icon-container {
+            position: absolute;
+            left: 50%;
+            bottom: 15%; /* 15% from bottom */
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 2vw;
-            /* Responsive gap based on screen width */
             z-index: 10;
+            max-width: 90%;
+        }
+
+        /* Responsive icon container adjustments */
+        @media (max-width: 768px) {
+            .icon-container {
+                gap: 4vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .icon-container {
+                gap: 6vw;
+            }
         }
 
         .icon-link {
             height: 100%;
-            /* Forces the link to fill the 10% height allowed */
             display: block;
+            transition: transform 0.3s ease;
         }
 
         .icon-link img {
             height: 100%;
-            /* Forces the image to scale to the container height */
             width: auto;
-            /* Keeps the icon from looking squashed or stretched */
+            max-height: 8vh;
             display: block;
+        }
+
+        /* Responsive icon sizes */
+        @media (max-width: 768px) {
+            .icon-link img {
+                max-height: 6vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .icon-link img {
+                max-height: 5vh;
+            }
         }
 
         .icon-link:hover {
             transform: scale(1.1);
-            /* Slight pop effect on hover */
+        }
+
+        /* Landscape orientation adjustments */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .icon-container {
+                top: 70%;
+                bottom: 5%;
+            }
+            
+            .icon-link img {
+                max-height: 10vh;
+            }
+        }
+
+        /* Ultra-wide screen adjustments */
+        @media (min-aspect-ratio: 21/9) {
+            .overlay-container .youtube-slide {
+                width: 50%;
+                height: 70%;
+            }
+        }
+
+        /* Portrait mode adjustments - IMPROVED FOR TALL SCREENS */
+        @media (orientation: portrait) {
+            .overlay-container .youtube-slide {
+                width: 80%;
+                height: 60%;
+                top: 58%;
+            }
+            
+            .icon-container {
+                flex-direction: row;
+                gap: 8vw;
+            }
+        }
+        
+        /* Extra tall/narrow screens (taller than 16:9) - ADDED */
+        @media (max-aspect-ratio: 9/16) {
+            .overlay-container .youtube-slide {
+                width: 92%;
+                height: 50%;
+                top: 60%;
+            }
         }
     </style>
 </head>
